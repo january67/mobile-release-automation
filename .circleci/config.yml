@@ -26,6 +26,6 @@ jobs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   create-rc:
-  when: << pipeline.parameters.cut_rc_release >>
+    when: << pipeline.parameters.cut_rc_release >>
     jobs:
       - cut-rc
