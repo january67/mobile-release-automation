@@ -6,6 +6,13 @@ parameters:
   cut_rc_release:
     default: false
     type: boolean
+  trigger_rc_pr:
+    default: false
+    type: boolean
+  rc_pr_title:
+    default: ""
+    type: string
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -21,6 +28,25 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+   open_pull_request_rc:
+    macos:
+      xcode: &xcode-img 13.4.1
+    parameters:
+      version_name:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            gem install bundler
+            bundle install
+      - run:
+          name: Build Lokalise FR Translations & Open PR
+          command: |
+            bundle exec fastlane trigger_lokalise_pr  \
+            version_name:"<< parameters.version_name >>"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -29,3 +55,9 @@ workflows:
     when: << pipeline.parameters.cut_rc_release >>
     jobs:
       - cut-rc
+  create_rc_trigger:
+    when: << pipeline.parameters.trigger_rc_pr >>
+    jobs:
+      
+      - open_pull_request_rc:
+          version_name: << pipeline.parameters.version_name >>

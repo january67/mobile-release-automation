@@ -12,12 +12,51 @@
 
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
+lane :open_pr_rc do |options|
+  UI.message 'Automobot attempting to create a PR....'
 
-default_platform(:ios)
+  release_branch = options[:rc_pr_title].gsub(/(.*) \(RC\d+\)/, '\1')
+  puts release_branch
 
-platform :ios do
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
-  end
+  create_pull_request(
+    api_token: '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',
+    repo: 'january67/mobile_test',
+    title: "Release #{options[:rc_pr_title]}",
+    head: "release/#{release_branch}",
+    base: 'releases',
+    body: 'testing 123',
+    assignees: 'loyalBot',
+    team_reviewers: %w[change-review-board robot-team small-team]
+  )
+  
 end
+
+lane :query_tags do
+  response = github_api(
+    server_url: 'https://api.github.com',
+    api_token: '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',
+    http_method: 'GET',
+    path: '/repos/january67/mobile_test/releases?per_page=15'
+  )
+  release_list = lane_context[SharedValues::GITHUB_API_JSON]
+  # puts release_list
+  # puts release_list.sort_by {|release| release.tag_name}
+
+  # dog = release_list.map{|obj| obj.slice('name')}
+  # release_tags = dog.values
+  puts release_list.map { |entry| entry['tag_name'] }
+  # filter_tags(
+  #   release_tag: '1.120.0',
+  #   json_last_15_releases: release_list.map { |entry| entry['tag_name'] }
+  # )
+  # puts lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
+  # last_release_tag = lane_context[SharedValues::LATEST_RC_VERSION]
+
+  # create_release_tag(
+  #   latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
+  #   release_version: '1.120.0',
+  #   found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
+  # )
+  # create_release()
+end
+
