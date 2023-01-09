@@ -32,7 +32,7 @@ jobs:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
-      version_name:
+      rc_pr_title:
         type: string
         default: ""
     steps:
@@ -43,10 +43,10 @@ jobs:
             gem install bundler
             bundle install
       - run:
-          name: Build Lokalise FR Translations & Open PR
+          name: Open PR from stabilization branch into releases
           command: |
-            bundle exec fastlane trigger_lokalise_pr  \
-            version_name:"<< parameters.version_name >>"
+            bundle exec fastlane open_pr_rc  \
+            rc_pr_title:"<< parameters.rc_pr_title >>"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -60,4 +60,4 @@ workflows:
     jobs:
       
       - open_pull_request_rc:
-          version_name: << pipeline.parameters.version_name >>
+          rc_pr_title: << pipeline.parameters.rc_pr_title >>
