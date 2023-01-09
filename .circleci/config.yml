@@ -46,7 +46,8 @@ jobs:
           name: Open PR from stabilization branch into releases
           command: |
             bundle exec fastlane open_pr_rc  \
-            rc_pr_title:"<< parameters.rc_pr_title >>"
+            rc_pr_title:"<< parameters.rc_pr_title >>" \
+            bot_pat:$BOT_PAT
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

@@ -19,7 +19,7 @@ lane :open_pr_rc do |options|
   puts release_branch
 
   create_pull_request(
-    api_token: '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',
+    api_token: options[:bot_pat],
     repo: 'january67/mobile_test',
     title: "Release #{options[:rc_pr_title]}",
     head: "release/#{release_branch}",
