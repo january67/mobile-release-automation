@@ -28,7 +28,7 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
-   open_pull_request_rc:
+  open_pull_request_rc:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
@@ -58,6 +58,5 @@ workflows:
   create_rc_trigger:
     when: << pipeline.parameters.trigger_rc_pr >>
     jobs:
-      
       - open_pull_request_rc:
           rc_pr_title: << pipeline.parameters.rc_pr_title >>
