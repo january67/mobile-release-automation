@@ -15,7 +15,7 @@
 lane :open_pr_rc do |options|
   UI.message 'Automobot attempting to create a PR....'
 
-  release_branch = options[:rc_pr_title].gsub(/(.*) \(RC\d+\)/, '\1')
+  release_branch = options[:rc_pr_title].gsub(/\s*\(.*\)/, '').gsub(/(\d)$/, '0')
   puts release_branch
 
   create_pull_request(
@@ -114,13 +114,15 @@ lane :yo do
   
 
 
-  hi(title: "Release 1.129.0 (RC3)")
+  hi(title: "Release 1.129.0 (RC3)", input: "1.130.1 (RC2)")
 end
 
 lane :hi do |options|
   version = options[:title].match(/\d+\.\d+\.\d+/)[0]
   tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
   title = options[:title].sub(/Release /, "")
+
+  branch = options[:input].gsub(/\s*\(.*\)/, '').gsub(/(\d)$/, '0')
   # version = options[:title].match(/\d+\.\d+\.\d+/)[0]
   # tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
   # final = tag.gsub(/\s|\)$/, "")
@@ -128,6 +130,7 @@ lane :hi do |options|
   puts title
   puts version
   puts tag
+  puts branch
   #puts final
  
    
