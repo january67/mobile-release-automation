@@ -18,7 +18,7 @@ lane :open_pr_rc do |options|
   release_branch = options[:rc_pr_title].gsub(/\s*\(.*\)/, '').gsub(/(\d)$/, '0')
   puts release_branch
 
-  create_pull_request(
+  pr = create_pull_request(
     api_token: options[:bot_pat],
     repo: 'january67/mobile_test',
     title: "Release #{options[:rc_pr_title]}",
@@ -28,6 +28,10 @@ lane :open_pr_rc do |options|
     assignees: 'loyalBot',
     team_reviewers: %w[change-review-board robot-team small-team]
   )
+  if pr.status != 200
+    UI.user_error!("Failed to create pull request. response code: #{response.status}")
+  end 
+  puts pr
   
 end
 
@@ -46,11 +50,15 @@ lane :merge_pr do |options|
 
   response = github_api(
     server_url: 'https://api.github.com',
-    api_token: options[:bot_pat],
+    api_token: "3",
     http_method: 'PUT',
     path: "/repos/january67/mobile_test/pulls/#{options[:pr_number]}/merge",
     body: merge_config
   )
+
+  if response.status != 200
+    UI.user_error!("Failed to merge pull request. response code: #{response.status}")
+  end
 
   UI.message "Automobot merge attempt complete response - #{response}"
 
