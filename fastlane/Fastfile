@@ -28,7 +28,7 @@ lane :open_pr_rc do |options|
     assignees: 'loyalBot',
     team_reviewers: %w[change-review-board robot-team small-team]
   )
-  if pr.status != 200
+  if pr.status != 201
     UI.user_error!("Failed to create pull request. response code: #{response.status}")
   end 
   puts pr
@@ -87,6 +87,11 @@ lane :create_release do |options|
     path: '/repos/january67/mobile_test/releases',
     body: release_config
   )
+
+  if response.status != 201
+    UI.user_error!("Failed to create release. response code: #{response.status}")
+  end
+
 end
 
 # lane :query_tags do
