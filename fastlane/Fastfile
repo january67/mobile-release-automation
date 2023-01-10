@@ -40,8 +40,6 @@ lane :merge_pr do |options|
   UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}"
 
   merge_config = {
-    'commit_title' => 'Hello Humans - Automobot',
-    'commit_message' => 'bee bop',
     'merge_method' => 'merge'
   }
   merge_config = JSON.generate(merge_config)
@@ -58,8 +56,6 @@ lane :merge_pr do |options|
   if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
     UI.user_error!("Failed to merge pull request")
   end
-
-  UI.message "Automobot merge attempt complete response - #{response}"
 
   create_release(title: options[:rc_pr_title], bot_pat: options[:bot_pat])
 end
