@@ -65,7 +65,7 @@ lane :create_release do |options|
   title = options[:title].sub(/Release/, "").delete_prefix(' ')
   release_config = {
     'tag_name' => "#{tag}",
-    'name' => "#{options[:title]}",
+    'name' => "#{title}",
     'target_commitish' => "releases",
     'generate_release_notes' => true
   }
