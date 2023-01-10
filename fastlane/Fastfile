@@ -67,9 +67,10 @@ end
 
 lane :create_release do |options|
   
-  # version = options[:title].match(/\d+\.\d+\.\d+/)[0]
+  # "Release 1.129.0 (RC1) -> 1.129.0-rc.1"
   tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
-  title = options[:title].sub(/Release/, "").delete_prefix(' ')
+  # "Release 1.129.0 (RC1) -> 1.129.0 (RC1)"
+  title = options[:title].sub(/Release /, "")
   release_config = {
     'tag_name' => "#{tag}",
     'name' => "#{title}",
