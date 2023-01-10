@@ -56,8 +56,8 @@ lane :merge_pr do |options|
     body: merge_config
   )
 
-  if response.status != 200
-    UI.user_error!("Failed to merge pull request. response code: #{response.status}")
+  if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
+    UI.user_error!("Failed to merge pull request")
   end
 
   UI.message "Automobot merge attempt complete response - #{response}"
@@ -68,7 +68,7 @@ end
 
 lane :create_release do |options|
   
-  version = options[:title].match(/\d+\.\d+\.\d+/)[0]
+  # version = options[:title].match(/\d+\.\d+\.\d+/)[0]
   tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
   title = options[:title].sub(/Release/, "").delete_prefix(' ')
   release_config = {
@@ -88,8 +88,8 @@ lane :create_release do |options|
     body: release_config
   )
 
-  if response.status != 201
-    UI.user_error!("Failed to create release. response code: #{response.status}")
+  if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 201
+    UI.user_error!("Failed to create release")
   end
 
 end
