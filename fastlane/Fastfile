@@ -45,7 +45,7 @@ lane :merge_pr do |options|
   merge_config = JSON.generate(merge_config)
   puts merge_config
 
-  response = github_api(
+  github_api(
     server_url: 'https://api.github.com',
     api_token: options[:bot_pat],
     http_method: 'PUT',
@@ -54,7 +54,7 @@ lane :merge_pr do |options|
   )
 
   if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
-    UI.user_error!("Failed to merge pull request")
+    UI.user_error!('Failed to merge pull request')
   end
 
   create_release(title: options[:rc_pr_title], bot_pat: options[:bot_pat])
@@ -64,19 +64,19 @@ end
 lane :create_release do |options|
   
   # "Release 1.129.0 (RC1) -> 1.129.0-rc.1"
-  tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
+  tag = options[:title].sub(/Release/, '').sub(/\(RC/, '-rc.').gsub(/\s|\)$/, '')
   # "Release 1.129.0 (RC1) -> 1.129.0 (RC1)"
-  title = options[:title].sub(/Release /, "")
+  title = options[:title].sub(/Release /, '')
   release_config = {
     'tag_name' => "#{tag}",
     'name' => "#{title}",
-    'target_commitish' => "releases",
+    'target_commitish' => 'releases',
     'generate_release_notes' => true
   }
 
   release_config = JSON.generate(release_config)
 
-  response = github_api(
+  github_api(
     server_url: 'https://api.github.com',
     api_token: options[:bot_pat],
     http_method: 'POST',
