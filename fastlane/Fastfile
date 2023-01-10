@@ -28,8 +28,8 @@ lane :open_pr_rc do |options|
     assignees: 'loyalBot',
     team_reviewers: %w[change-review-board robot-team small-team]
   )
-  if pr.status != 201
-    UI.user_error!("Failed to create pull request. response code: #{response.status}")
+  if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 201
+    UI.user_error!("Failed to create pull request")
   end 
   puts pr
   
