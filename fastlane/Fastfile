@@ -110,23 +110,25 @@ end
 #   # create_release()
 # end
 
-# lane :yo do 
+lane :yo do 
   
 
 
-#   hi(title: "Release 1.129.0 (RC3)")
-# end
+  hi(title: "Release 1.129.0 (RC3)")
+end
 
-# lane :hi do |options|
-
-#   version = options[:title].match(/\d+\.\d+\.\d+/)[0]
-#   tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
-#   final = tag.gsub(/\s|\)$/, "")
-#   title = options[:title].sub(/Release/, "").delete_prefix(' ')
-#   puts title
-#   puts version
-#   puts tag
-#   puts final
+lane :hi do |options|
+  version = options[:title].match(/\d+\.\d+\.\d+/)[0]
+  tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
+  title = options[:title].sub(/Release /, "")
+  # version = options[:title].match(/\d+\.\d+\.\d+/)[0]
+  # tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
+  # final = tag.gsub(/\s|\)$/, "")
+  # title = options[:title].sub(/Release/, "").delete_prefix(' ')
+  puts title
+  puts version
+  puts tag
+  #puts final
  
    
-#  end
+ end

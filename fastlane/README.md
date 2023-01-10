@@ -37,14 +37,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### query_tags
-
-```sh
-[bundle exec] fastlane query_tags
-```
-
-
-
 ### yo
 
 ```sh
