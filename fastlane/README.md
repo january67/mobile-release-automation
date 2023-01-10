@@ -13,10 +13,50 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### open_pr_rc
+
+```sh
+[bundle exec] fastlane open_pr_rc
+```
+
+
+
+### merge_pr
+
+```sh
+[bundle exec] fastlane merge_pr
+```
+
+
+
+### create_release
+
+```sh
+[bundle exec] fastlane create_release
+```
+
+
+
 ### query_tags
 
 ```sh
 [bundle exec] fastlane query_tags
+```
+
+
+
+### yo
+
+```sh
+[bundle exec] fastlane yo
+```
+
+
+
+### hi
+
+```sh
+[bundle exec] fastlane hi
 ```
 
 

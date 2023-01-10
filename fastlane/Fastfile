@@ -31,7 +31,7 @@ lane :open_pr_rc do |options|
   
 end
 
-lane :merge_pr do
+lane :merge_pr do |options|
   
 
   UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}"
@@ -54,18 +54,19 @@ lane :merge_pr do
 
   UI.message "Automobot merge attempt complete response - #{response}"
 
-  
+  create_release(title: options[:rc_pr_title], bot_pat: options[:bot_pat])
 end
 
 
-lane :create_release do
-  puts lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
-  puts lane_context[SharedValues::LATEST_RC_VERSION]
-
+lane :create_release do |options|
+  
+  version = options[:title].match(/\d+\.\d+\.\d+/)[0]
+  tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
+  title = options[:title].sub(/Release/, "").delete_prefix(' ')
   release_config = {
-    'tag_name' => "#{lane_context[SharedValues::NEXT_RELEASE_TAG]}",
-    'name' => 'Release 1.120.0 (RC1)',
-    'target_commitish' => 'release/1.120.0',
+    'tag_name' => "#{tag}",
+    'name' => "#{options[:title]}",
+    'target_commitish' => "releases",
     'generate_release_notes' => true
   }
 
@@ -73,39 +74,59 @@ lane :create_release do
 
   response = github_api(
     server_url: 'https://api.github.com',
-    api_token: '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',
+    api_token: options[:bot_pat],
     http_method: 'POST',
-    path: '/repos/RobAndrsn/mobile_test/releases',
+    path: '/repos/january67/mobile_test/releases',
     body: release_config
   )
 end
 
-lane :query_tags do
-  response = github_api(
-    server_url: 'https://api.github.com',
-    api_token: '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',
-    http_method: 'GET',
-    path: '/repos/january67/mobile_test/releases?per_page=15'
-  )
-  release_list = lane_context[SharedValues::GITHUB_API_JSON]
-  # puts release_list
-  # puts release_list.sort_by {|release| release.tag_name}
+# lane :query_tags do
+#   response = github_api(
+#     server_url: 'https://api.github.com',
+#     api_token: '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',
+#     http_method: 'GET',
+#     path: '/repos/january67/mobile_test/releases?per_page=15'
+#   )
+#   release_list = lane_context[SharedValues::GITHUB_API_JSON]
+#   # puts release_list
+#   # puts release_list.sort_by {|release| release.tag_name}
 
-  # dog = release_list.map{|obj| obj.slice('name')}
-  # release_tags = dog.values
-  puts release_list.map { |entry| entry['tag_name'] }
-  # filter_tags(
-  #   release_tag: '1.120.0',
-  #   json_last_15_releases: release_list.map { |entry| entry['tag_name'] }
-  # )
-  # puts lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
-  # last_release_tag = lane_context[SharedValues::LATEST_RC_VERSION]
+#   # dog = release_list.map{|obj| obj.slice('name')}
+#   # release_tags = dog.values
+#   puts release_list.map { |entry| entry['tag_name'] }
+#   # filter_tags(
+#   #   release_tag: '1.120.0',
+#   #   json_last_15_releases: release_list.map { |entry| entry['tag_name'] }
+#   # )
+#   # puts lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
+#   # last_release_tag = lane_context[SharedValues::LATEST_RC_VERSION]
 
-  # create_release_tag(
-  #   latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
-  #   release_version: '1.120.0',
-  #   found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
-  # )
-  # create_release()
-end
+#   # create_release_tag(
+#   #   latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
+#   #   release_version: '1.120.0',
+#   #   found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
+#   # )
+#   # create_release()
+# end
 
+# lane :yo do 
+  
+
+
+#   hi(title: "Release 1.129.0 (RC3)")
+# end
+
+# lane :hi do |options|
+
+#   version = options[:title].match(/\d+\.\d+\.\d+/)[0]
+#   tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
+#   final = tag.gsub(/\s|\)$/, "")
+#   title = options[:title].sub(/Release/, "").delete_prefix(' ')
+#   puts title
+#   puts version
+#   puts tag
+#   puts final
+ 
+   
+#  end

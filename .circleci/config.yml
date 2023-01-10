@@ -61,6 +61,9 @@ jobs:
       pr_number:
         type: string
         default: ""
+      rc_pr_title:
+        type: string
+        default: ""
     steps:
       - checkout
       - run:
@@ -73,6 +76,7 @@ jobs:
           command: |
             bundle exec fastlane merge_pr  \
             pr_number:"<< parameters.pr_number >>" \
+            rc_pr_title:"<< parameters.rc_pr_title >>" \
             bot_pat:$BOT_PAT
 
 # Invoke jobs via workflows
@@ -92,3 +96,4 @@ workflows:
     jobs:
       - merge_rc_pr:
           pr_number: << pipeline.parameters.pr_number >>
+          rc_pr_title: << pipeline.parameters.rc_pr_title >>
