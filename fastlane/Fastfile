@@ -50,7 +50,7 @@ lane :merge_pr do |options|
 
   response = github_api(
     server_url: 'https://api.github.com',
-    api_token: "3",
+    api_token: options[:bot_pat],
     http_method: 'PUT',
     path: "/repos/january67/mobile_test/pulls/#{options[:pr_number]}/merge",
     body: merge_config
