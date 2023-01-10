@@ -24,9 +24,8 @@ lane :open_pr_rc do |options|
     title: "Release #{options[:rc_pr_title]}",
     head: "release/#{release_branch}",
     base: 'releases',
-    body: 'testing 123',
     assignees: 'loyalBot',
-    team_reviewers: %w[change-review-board robot-team small-team]
+    team_reviewers: ['change-review-board']
   )
   if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 201
     UI.user_error!("Failed to create pull request")
