@@ -31,6 +31,55 @@ lane :open_pr_rc do |options|
   
 end
 
+lane :merge_pr do
+  
+
+  UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}"
+
+  merge_config = {
+    'commit_title' => 'Hello Humans - Automobot',
+    'commit_message' => 'bee bop',
+    'merge_method' => 'merge'
+  }
+  merge_config = JSON.generate(merge_config)
+  puts merge_config
+
+  response = github_api(
+    server_url: 'https://api.github.com',
+    api_token: options[:bot_pat],
+    http_method: 'PUT',
+    path: "/repos/january67/mobile_test/pulls/#{options[:pr_number]}/merge",
+    body: merge_config
+  )
+
+  UI.message "Automobot merge attempt complete response - #{response}"
+
+  
+end
+
+
+lane :create_release do
+  puts lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
+  puts lane_context[SharedValues::LATEST_RC_VERSION]
+
+  release_config = {
+    'tag_name' => "#{lane_context[SharedValues::NEXT_RELEASE_TAG]}",
+    'name' => 'Release 1.120.0 (RC1)',
+    'target_commitish' => 'release/1.120.0',
+    'generate_release_notes' => true
+  }
+
+  release_config = JSON.generate(release_config)
+
+  response = github_api(
+    server_url: 'https://api.github.com',
+    api_token: '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',
+    http_method: 'POST',
+    path: '/repos/RobAndrsn/mobile_test/releases',
+    body: release_config
+  )
+end
+
 lane :query_tags do
   response = github_api(
     server_url: 'https://api.github.com',

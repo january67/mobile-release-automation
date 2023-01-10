@@ -9,7 +9,13 @@ parameters:
   trigger_rc_pr:
     default: false
     type: boolean
+  merge_rc_pr:
+    default: false
+    type: boolean
   rc_pr_title:
+    default: ""
+    type: string
+  pr_number:
     default: ""
     type: string
 
@@ -48,6 +54,26 @@ jobs:
             bundle exec fastlane open_pr_rc  \
             rc_pr_title:"<< parameters.rc_pr_title >>" \
             bot_pat:$BOT_PAT
+  merge_rc_pr:
+    macos:
+      xcode: &xcode-img 13.4.1
+    parameters:
+      pr_number:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            gem install bundler
+            bundle install
+      - run:
+          name: Merge RC PR
+          command: |
+            bundle exec fastlane merge_pr  \
+            pr_number:"<< parameters.pr_number >>" \
+            bot_pat:$BOT_PAT
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -61,3 +87,8 @@ workflows:
     jobs:
       - open_pull_request_rc:
           rc_pr_title: << pipeline.parameters.rc_pr_title >>
+  merge_rc_pr_trigger:
+    when: << pipeline.parameters.merge_rc_pr >>
+    jobs:
+      - merge_rc_pr:
+          pr_number: << pipeline.parameters.pr_number >>
