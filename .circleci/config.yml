@@ -14,12 +14,16 @@ parameters:
     type: boolean
   rc_version:
     type: string
+    default: ""
   rc_number:
     type: string
+    default: ""
   pr_number:
     type: string
+    default: ""
   workflow_rc_pr_title:
     type: string
+    default: ""
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
