@@ -6,10 +6,10 @@ parameters:
   cut_rc_release:
     default: false
     type: boolean
-  workflow_rc_pr:
+  trigger_rc_pr:
     default: false
     type: boolean
-  merge_rc_pr:
+  trigger_merge_rc_pr:
     default: false
     type: boolean
   rc_version:
@@ -49,7 +49,7 @@ jobs:
             bundle exec fastlane open_pr_rc  \
             rc_version:"<< parameters.rc_version >>" \
             rc_number:"<< parameters.rc_number >>"
-  merge_rc_pr_trigger:
+  merge_rc_pr:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
@@ -75,7 +75,7 @@ jobs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   create_rc_trigger:
-    when: << pipeline.parameters.workflow_rc_pr >>
+    when: << pipeline.parameters.trigger_rc_pr >>
     jobs:
       - open_pull_request_rc:
           rc_version: << pipeline.parameters.rc_version >>
