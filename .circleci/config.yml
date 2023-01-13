@@ -6,41 +6,32 @@ parameters:
   cut_rc_release:
     default: false
     type: boolean
-  trigger_rc_pr:
+  workflow_rc_pr:
     default: false
     type: boolean
   merge_rc_pr:
     default: false
     type: boolean
-  rc_pr_title:
-    default: ""
+  rc_version:
+    type: string
+  rc_number:
     type: string
   pr_number:
-    default: ""
+    type: string
+  workflow_rc_pr_title:
     type: string
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  cut-rc:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
   open_pull_request_rc:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
-      rc_pr_title:
+      rc_version:
         type: string
-        default: ""
+      rc_number:
+        type: string
     steps:
       - checkout
       - run:
@@ -52,18 +43,16 @@ jobs:
           name: Open PR from stabilization branch into releases
           command: |
             bundle exec fastlane open_pr_rc  \
-            rc_pr_title:"<< parameters.rc_pr_title >>" \
-            bot_pat:$BOT_PAT
-  merge_rc_pr:
+            rc_version:"<< parameters.rc_version >>" \
+            rc_number:"<< parameters.rc_number >>"
+  merge_rc_pr_trigger:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
       pr_number:
         type: string
-        default: ""
-      rc_pr_title:
+      workflow_rc_pr_title:
         type: string
-        default: ""
     steps:
       - checkout
       - run:
@@ -72,28 +61,24 @@ jobs:
             gem install bundler
             bundle install
       - run:
-          name: Merge RC PR
+          name: Merge RC PR Trigger
           command: |
-            bundle exec fastlane merge_pr  \
+            bundle exec fastlane merge_rc_pr  \
             pr_number:"<< parameters.pr_number >>" \
-            rc_pr_title:"<< parameters.rc_pr_title >>" \
-            bot_pat:$BOT_PAT
+            workflow_rc_pr_title:"<< parameters.workflow_rc_pr_title >>"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  create-rc:
-    when: << pipeline.parameters.cut_rc_release >>
-    jobs:
-      - cut-rc
   create_rc_trigger:
-    when: << pipeline.parameters.trigger_rc_pr >>
+    when: << pipeline.parameters.workflow_rc_pr >>
     jobs:
       - open_pull_request_rc:
-          rc_pr_title: << pipeline.parameters.rc_pr_title >>
+          rc_version: << pipeline.parameters.rc_version >>
+          rc_number: << pipeline.parameters.rc_number >>
   merge_rc_pr_trigger:
-    when: << pipeline.parameters.merge_rc_pr >>
+    when: << pipeline.parameters.trigger_merge_rc_pr >>
     jobs:
       - merge_rc_pr:
           pr_number: << pipeline.parameters.pr_number >>
-          rc_pr_title: << pipeline.parameters.rc_pr_title >>
+          workflow_rc_pr_title: << pipeline.parameters.workflow_rc_pr_title >>

@@ -15,13 +15,13 @@
 lane :open_pr_rc do |options|
   UI.message 'Automobot attempting to create a PR....'
 
-  release_branch = options[:rc_pr_title].gsub(/\s*\(.*\)/, '').gsub(/(\d)$/, '0')
+  release_branch = options[:rc_version].gsub(/\d$/, "0")
   puts release_branch
 
   pr = create_pull_request(
-    api_token: options[:bot_pat],
+    api_token: ENV["BOT_PAT"],
     repo: 'january67/mobile_test',
-    title: "Release #{options[:rc_pr_title]}",
+    title: "Release #{options[:rc_version]} (RC#{options[:rc_number]})",
     head: "release/#{release_branch}",
     base: 'releases',
     assignees: 'loyalBot',
@@ -34,30 +34,27 @@ lane :open_pr_rc do |options|
   
 end
 
-lane :merge_pr do |options|
+lane :merge_rc_pr do |options|
   
 
   UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}"
 
-  merge_config = {
-    'merge_method' => 'merge'
-  }
-  merge_config = JSON.generate(merge_config)
-  puts merge_config
+  
+  body = JSON.generate({'merge_method' => 'merge'})
+  puts body
 
   github_api(
-    server_url: 'https://api.github.com',
-    api_token: options[:bot_pat],
+    api_token: ENV["BOT_PAT"],
     http_method: 'PUT',
     path: "/repos/january67/mobile_test/pulls/#{options[:pr_number]}/merge",
-    body: merge_config
+    body: body
   )
 
   if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
     UI.user_error!('Failed to merge pull request')
   end
 
-  create_release(title: options[:rc_pr_title], bot_pat: options[:bot_pat])
+  create_release(title: options[:rc_pr_title])
 end
 
 
@@ -67,21 +64,23 @@ lane :create_release do |options|
   tag = options[:title].sub(/Release/, '').sub(/\(RC/, '-rc.').gsub(/\s|\)$/, '')
   # "Release 1.129.0 (RC1) -> 1.129.0 (RC1)"
   title = options[:title].sub(/Release /, '')
-  release_config = {
-    'tag_name' => "#{tag}",
+  # release_config = {
+  #   'tag_name' => "#{tag}",
+  #   'name' => "#{title}",
+  #   'target_commitish' => 'releases',
+  #   'generate_release_notes' => true
+  # }
+  body = JSON.generate({'tag_name' => "#{tag}",
     'name' => "#{title}",
     'target_commitish' => 'releases',
-    'generate_release_notes' => true
-  }
-
-  release_config = JSON.generate(release_config)
+    'generate_release_notes' => true})
+  # release_config = JSON.generate(release_config)
 
   github_api(
-    server_url: 'https://api.github.com',
-    api_token: options[:bot_pat],
+    api_token: ENV["BOT_PAT"],
     http_method: 'POST',
     path: '/repos/january67/mobile_test/releases',
-    body: release_config
+    body: body
   )
 
   if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 201
