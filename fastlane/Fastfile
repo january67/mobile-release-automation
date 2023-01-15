@@ -15,14 +15,11 @@
 lane :open_pr_rc do |options|
   UI.message 'Automobot attempting to create a PR....'
 
-  release_branch = options[:rc_version].gsub(/\d$/, "0")
-  puts release_branch
-
-  pr = create_pull_request(
+  create_pull_request(
     api_token: ENV["BOT_PAT"],
     repo: 'january67/mobile_test',
     title: "Release #{options[:rc_version]} (RC#{options[:rc_number]})",
-    head: "release/#{release_branch}",
+    head: "release/#{options[:rc_version]}",
     base: 'releases',
     assignees: 'loyalBot',
     team_reviewers: ['change-review-board']
@@ -30,7 +27,6 @@ lane :open_pr_rc do |options|
   if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 201
     UI.user_error!("Failed to create pull request")
   end 
-  puts pr
   
 end
 
