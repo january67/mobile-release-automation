@@ -3,7 +3,7 @@ module Fastlane
     class OpenPullRequestAction < Action
       def self.run(params)
      
-        create_pull_request(
+        other_action.create_pull_request(
           api_token: params[:api_token],
           repo: 'january67/mobile_test',
           title: "Release #{params[:rc_version]} (RC#{params[:rc_number]})",
