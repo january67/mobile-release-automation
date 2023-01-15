@@ -34,8 +34,10 @@ jobs:
     parameters:
       rc_version:
         type: string
+        default: ""
       rc_number:
         type: string
+        default: ""
     steps:
       - checkout
       - run:
