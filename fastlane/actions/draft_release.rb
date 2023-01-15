@@ -2,11 +2,10 @@ module Fastlane
   module Actions
     class DraftReleaseAction < Action
       def self.run(params)
-       
-       
+        
         body = JSON.generate({
           'tag_name' => "#{lane_context[SharedValues::NEXT_RELEASE_TAG]}",
-          'name' => "#{params[:version]}",
+          'name' => "#{params[:version]} (RC#{lane_context[SharedValues::NEXT_RELEASE_TAG].split(".").last})",
           'target_commitish' => 'releases',
           'generate_release_notes' => true
           })

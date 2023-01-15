@@ -5,12 +5,7 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: get_latest_release" time="0.757767">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="1: create_release_tag" time="0.004211">
+      <testcase classname="fastlane.lanes" name="0: Switch to hi lane" time="0.000305">
         
       </testcase>
     

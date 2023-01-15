@@ -135,7 +135,7 @@ lane :yo do
   
 
 
-  hi(title: "Release 1.129.0 (RC3)", input: "1.130.1 (RC2)")
+  hi(title: "Release 1.129.0 (RC3)", input: "1.130.1 (RC2)", tag: "1.130.0-rc.0")
 end
 
 lane :hi do |options|
@@ -144,6 +144,8 @@ lane :hi do |options|
   title = options[:title].sub(/Release /, "")
 
   branch = options[:input].gsub(/\s*\(.*\)/, '').gsub(/(\d)$/, '0')
+  beef = options[:tag].split(".").last
+  puts beef
   # version = options[:title].match(/\d+\.\d+\.\d+/)[0]
   # tag = options[:title].sub(/Release/, "").sub(/\(RC/, "-rc.").gsub(/\s|\)$/, "")
   # final = tag.gsub(/\s|\)$/, "")
