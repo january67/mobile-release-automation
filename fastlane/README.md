@@ -21,10 +21,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### merge_pr
+### merge_draft_rc
 
 ```sh
-[bundle exec] fastlane merge_pr
+[bundle exec] fastlane merge_draft_rc
 ```
 
 

@@ -30,11 +30,27 @@ lane :open_pr_rc do |options|
   
 end
 
-lane :merge_rc_pr do |options|
+lane :merge_draft_rc do |options|
   
   merge_pr(
     pr_number: options[:pr_number]
   )
+
+  get_latest_release(
+    release_tag: options[:rc_pr_head]
+  )
+
+  create_release_tag(
+    latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
+    release_version: options[:rc_pr_head],
+    found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
+  )
+
+  draft_release(
+    next_release_tag: lane_context[SharedValues::NEXT_RELEASE_TAG],
+    version: options[:rc_pr_head]
+  )
+
   # UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}, head #{options[:rc_pr_head]}"
 
   
