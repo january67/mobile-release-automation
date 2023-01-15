@@ -6,7 +6,7 @@ module Fastlane
 
         body = JSON.generate({'merge_method' => 'merge'})
     
-        github_api(
+        other_action.github_api(
           api_token: params[:api_token],
           http_method: 'PUT',
           path: "/repos/january67/mobile_test/pulls/#{params[:pr_number]}/merge",
