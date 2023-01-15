@@ -33,24 +33,24 @@ end
 lane :merge_rc_pr do |options|
   
 
-  UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}"
+  UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}, head #{options[:rc_pr_head]}"
 
   
-  body = JSON.generate({'merge_method' => 'merge'})
-  puts body
+  # body = JSON.generate({'merge_method' => 'merge'})
+  # puts body
 
-  github_api(
-    api_token: ENV["BOT_PAT"],
-    http_method: 'PUT',
-    path: "/repos/january67/mobile_test/pulls/#{options[:pr_number]}/merge",
-    body: body
-  )
+  # github_api(
+  #   api_token: ENV["BOT_PAT"],
+  #   http_method: 'PUT',
+  #   path: "/repos/january67/mobile_test/pulls/#{options[:pr_number]}/merge",
+  #   body: body
+  # )
 
-  if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
-    UI.user_error!('Failed to merge pull request')
-  end
+  # if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
+  #   UI.user_error!('Failed to merge pull request')
+  # end
 
-  create_release(title: options[:rc_pr_title])
+  # create_release(title: options[:rc_pr_title])
 end
 
 

@@ -21,7 +21,7 @@ parameters:
   pr_number:
     type: string
     default: ""
-  workflow_rc_pr_title:
+  rc_pr_head:
     type: string
     default: ""
 
@@ -55,7 +55,7 @@ jobs:
     parameters:
       pr_number:
         type: string
-      workflow_rc_pr_title:
+      rc_pr_head:
         type: string
     steps:
       - checkout
@@ -69,7 +69,7 @@ jobs:
           command: |
             bundle exec fastlane merge_rc_pr  \
             pr_number:"<< parameters.pr_number >>" \
-            workflow_rc_pr_title:"<< parameters.workflow_rc_pr_title >>"
+            rc_pr_head:"<< parameters.rc_pr_head >>"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -85,4 +85,4 @@ workflows:
     jobs:
       - merge_rc_pr:
           pr_number: << pipeline.parameters.pr_number >>
-          workflow_rc_pr_title: << pipeline.parameters.workflow_rc_pr_title >>
+          rc_pr_head: << pipeline.parameters.rc_pr_head >>
