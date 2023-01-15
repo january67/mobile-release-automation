@@ -31,7 +31,7 @@ lane :open_pr_rc do |options|
 end
 
 lane :merge_draft_rc do |options|
-  version: options[:rc_pr_head].split("/").last
+  version = options[:rc_pr_head].split("/").last
   merge_pr(
     pr_number: options[:pr_number]
   )
