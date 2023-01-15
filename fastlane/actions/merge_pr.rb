@@ -1,6 +1,6 @@
 module Fastlane
   module Actions
-    class MergeRcPrAction < Action
+    class MergePrAction < Action
       def self.run(params)
         UI.message "Automobot attempting to merge pr number - #{params[:pr_number]}"
 

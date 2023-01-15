@@ -32,7 +32,7 @@ end
 
 lane :merge_rc_pr do |options|
   
-  merge_rc_pr(
+  merge_pr(
     pr_number: options[:pr_number]
   )
   # UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}, head #{options[:rc_pr_head]}"
