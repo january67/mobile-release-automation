@@ -7,7 +7,7 @@ module Fastlane
 
     class CreateReleaseTagAction < Action
       def self.run(params)
-        target = Semantic::Version.new params[:release_version]
+        target = Semantic::Version.new params[:version]
         
         if !params[:found_matching_version]
           # we are on a new version, rc starts at 1
@@ -31,7 +31,7 @@ module Fastlane
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(key: :latest_release_tag, optional: true),
-          FastlaneCore::ConfigItem.new(key: :release_version),
+          FastlaneCore::ConfigItem.new(key: :version),
           FastlaneCore::ConfigItem.new(key: :found_matching_version, is_string: false),
         ]
       end

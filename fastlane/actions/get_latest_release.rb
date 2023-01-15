@@ -17,14 +17,14 @@ module Fastlane
         puts release_list.map { |entry| entry['tag_name'] }
 
         matches = release_list.map { |entry| entry['tag_name'] }.sort.reverse
-        #d = matches.scan(params[:release_tag])
+        #d = matches.scan(params[:version])
         puts matches
-        found_matching_version = matches.any?{|s| s[/#{params[:release_tag]}/]}
+        found_matching_version = matches.any?{|s| s[/#{params[:version]}/]}
 
         puts "--------"
         puts found_matching_version
         if found_matching_version
-          lastest_rc_version = matches.find{|s| s[/#{params[:release_tag]}/]}
+          lastest_rc_version = matches.find{|s| s[/#{params[:version]}/]}
           puts lastest_rc_version
           Actions.lane_context[SharedValues::LATEST_RC_VERSION] = lastest_rc_version
         end
@@ -39,7 +39,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :api_token,
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
-          FastlaneCore::ConfigItem.new(key: :release_tag),
+          FastlaneCore::ConfigItem.new(key: :version),
 
         ]
       end
