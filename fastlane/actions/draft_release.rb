@@ -12,7 +12,7 @@ module Fastlane
           })
 
           other_action.github_api(
-            api_token: params[:BOT_PAT],
+            api_token: params[:api_token],
             http_method: 'POST',
             path: '/repos/january67/mobile_test/releases',
             body: body

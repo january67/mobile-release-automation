@@ -9,7 +9,7 @@ module Fastlane
       def self.run(params)
         
         other_action.github_api(
-          api_token: params[:BOT_PAT],
+          api_token: params[:api_token],
           http_method: 'GET',
           path: '/repos/january67/mobile_test/releases?per_page=15'
         )
