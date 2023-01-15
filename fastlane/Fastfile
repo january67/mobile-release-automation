@@ -13,20 +13,11 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 lane :open_pr_rc do |options|
-  UI.message 'Automobot attempting to create a PR....'
-
-  create_pull_request(
-    api_token: ENV["BOT_PAT"],
-    repo: 'january67/mobile_test',
-    title: "Release #{options[:rc_version]} (RC#{options[:rc_number]})",
-    head: "release/#{options[:rc_version]}",
-    base: 'releases',
-    assignees: 'loyalBot',
-    team_reviewers: ['change-review-board']
+ 
+  open_pull_request(
+    rc_version: options[:rc_version],
+    rc_number: options[:rc_number]
   )
-  if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 201
-    UI.user_error!("Failed to create pull request")
-  end 
   
 end
 
