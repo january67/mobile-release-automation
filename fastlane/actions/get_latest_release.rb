@@ -11,8 +11,12 @@ module Fastlane
         other_action.github_api(
           api_token: params[:api_token],
           http_method: 'GET',
-          path: '/repos/january67/mobile_test/releases?per_page=15'
+          path: "#{params[:repo_path]}/releases?per_page=15"
         )
+
+        UI.user_error!('Failed to fetch releases') if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
+
+        puts lane_context[SharedValues::GITHUB_API_JSON]["tag_name"]
         release_list = lane_context[SharedValues::GITHUB_API_JSON]
         puts release_list.map { |entry| entry['tag_name'] }
 
@@ -40,6 +44,7 @@ module Fastlane
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
           FastlaneCore::ConfigItem.new(key: :version),
+          FastlaneCore::ConfigItem.new(key: :repo_path)
 
         ]
       end

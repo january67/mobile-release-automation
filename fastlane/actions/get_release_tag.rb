@@ -5,7 +5,7 @@ module Fastlane
       NEXT_RELEASE_TAG = :NEXT_RELEASE_TAG
     end
 
-    class CreateReleaseTagAction < Action
+    class GetReleaseTagAction < Action
       def self.run(params)
         target = Semantic::Version.new params[:version]
         

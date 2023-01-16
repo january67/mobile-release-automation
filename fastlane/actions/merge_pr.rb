@@ -9,7 +9,7 @@ module Fastlane
         other_action.github_api(
           api_token: params[:api_token],
           http_method: 'PUT',
-          path: "/repos/january67/mobile_test/pulls/#{params[:pr_number]}/merge",
+          path: "#{params[:repo_path]}/pulls/#{params[:pr_number]}/merge",
           body: body
         )
     
@@ -27,7 +27,8 @@ module Fastlane
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
           FastlaneCore::ConfigItem.new(key: :pr_number,
-            description: 'Number of RC PR to merge'),
+            description: 'Number of PR to merge'),
+          FastlaneCore::ConfigItem.new(key: :repo_path)
         ]
       end
 

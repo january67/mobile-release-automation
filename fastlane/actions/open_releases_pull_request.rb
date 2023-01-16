@@ -1,12 +1,12 @@
 module Fastlane
   module Actions
-    class OpenPullRequestAction < Action
+    class OpenReleasesPullRequestAction < Action
       def self.run(params)
      
         other_action.create_pull_request(
           api_token: params[:api_token],
           repo: 'january67/mobile_test',
-          title: "Release #{params[:rc_version]} (RC#{params[:rc_number]})",
+          title: 'Release Review',
           head: "release/#{params[:rc_version]}",
           base: 'releases',
           assignees: 'loyalBot',
@@ -23,8 +23,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :api_token,
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
-          FastlaneCore::ConfigItem.new(key: :rc_version),
-          FastlaneCore::ConfigItem.new(key: :rc_number),
+          FastlaneCore::ConfigItem.new(key: :rc_version)
         ]
       end
 

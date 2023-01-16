@@ -12,41 +12,39 @@
 
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-lane :open_pr_rc do |options|
+lane :open_pr_release do |options|
  
-  open_pull_request(
-    rc_version: options[:rc_version],
-    rc_number: options[:rc_number]
+  open_releases_pull_request(
+    rc_version: options[:rc_version]
   )
   
 end
 
-lane :merge_draft_rc do |options|
-
-  get_release_version(
-    pr_number: options[:pr_number]
-  )
-
+lane :merge_publish_release do |options|
+  repo_path = '/repos/january67/mobile_test'
   get_release_version(
     pr_number: options[:pr_number]
   )
   merge_pr(
-    pr_number: options[:pr_number]
+    pr_number: options[:pr_number],
+    repo_path: repo_path
   )
 
   get_latest_release(
-    version: lane_context[SharedValues::VERSION]
+    version: lane_context[SharedValues::VERSION],
+    repo_path: repo_path
   )
 
-  create_release_tag(
+  get_release_tag(
     latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
     version: lane_context[SharedValues::VERSION],
     found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
   )
 
-  draft_release(
+  publish_release(
     next_release_tag: lane_context[SharedValues::NEXT_RELEASE_TAG],
-    version: lane_context[SharedValues::VERSION]
+    version: lane_context[SharedValues::VERSION],
+    repo_path: repo_path
   )
 
   # UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}, head #{options[:rc_pr_head]}"
@@ -121,7 +119,7 @@ end
 #   # puts lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
 #   # last_release_tag = lane_context[SharedValues::LATEST_RC_VERSION]
 
-#   # create_release_tag(
+#   # get_release_tag(
 #   #   latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
 #   #   release_version: '1.120.0',
 #   #   found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]

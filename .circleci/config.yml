@@ -6,35 +6,27 @@ parameters:
   cut_rc_release:
     default: false
     type: boolean
-  trigger_rc_pr:
+  trigger_pr_release:
     default: false
     type: boolean
-  trigger_merge_rc_pr:
+  trigger_merge_release:
     default: false
     type: boolean
-  rc_version:
-    type: string
-    default: ""
-  rc_number:
+  version_name:
     type: string
     default: ""
   pr_number:
-    type: string
-    default: ""
-  rc_pr_head:
-    type: string
-    default: ""
+    type: integer
+    default: 0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  open_pull_request_rc:
+  open_pull_request_release:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
-      rc_version:
-        type: string
-      rc_number:
+      version_name:
         type: string
     steps:
       - checkout
@@ -46,17 +38,15 @@ jobs:
       - run:
           name: Open PR from stabilization branch into releases
           command: |
-            bundle exec fastlane open_pr_rc  \
-            rc_version:"<< parameters.rc_version >>" \
-            rc_number:"<< parameters.rc_number >>"
-  merge_and_draft_release:
+            bundle exec fastlane open_pr_release  \
+            version_name:"<< parameters.version_name >>"
+
+  merge_and_publish_release:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
       pr_number:
-        type: string
-      rc_pr_head:
-        type: string
+        type: integer
     steps:
       - checkout
       - run:
@@ -65,24 +55,22 @@ jobs:
             gem install bundler
             bundle install
       - run:
-          name: Merge RC PR Trigger
+          name: Merge Release PR & Publish Release
           command: |
-            bundle exec fastlane merge_draft_rc  \
-            pr_number:"<< parameters.pr_number >>" \
-            rc_pr_head:"<< parameters.rc_pr_head >>"
+            bundle exec fastlane merge_publish_release  \
+            pr_number:"<< parameters.pr_number >>"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  create_rc_trigger:
-    when: << pipeline.parameters.trigger_rc_pr >>
+  create_release_trigger:
+    when: << pipeline.parameters.trigger_pr_release >>
     jobs:
-      - open_pull_request_rc:
-          rc_version: << pipeline.parameters.rc_version >>
-          rc_number: << pipeline.parameters.rc_number >>
-  merge_rc_pr_trigger:
-    when: << pipeline.parameters.trigger_merge_rc_pr >>
+      - open_pull_request_release:
+          rc_version: << pipeline.parameters.version_name >>
+
+  merge_release_trigger:
+    when: << pipeline.parameters.trigger_merge_release >>
     jobs:
-      - merge_and_draft_release:
+      - merge_and_publish_release:
           pr_number: << pipeline.parameters.pr_number >>
-          rc_pr_head: << pipeline.parameters.rc_pr_head >>

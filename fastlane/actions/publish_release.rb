@@ -1,6 +1,6 @@
 module Fastlane
   module Actions
-    class DraftReleaseAction < Action
+    class PublishReleaseAction < Action
       def self.run(params)
         
         body = JSON.generate({
@@ -13,7 +13,7 @@ module Fastlane
           other_action.github_api(
             api_token: params[:api_token],
             http_method: 'POST',
-            path: '/repos/january67/mobile_test/releases',
+            path: "#{params[:repo_path]}/releases",
             body: body
           )
         
@@ -33,6 +33,7 @@ module Fastlane
             description: 'Github PAT'),
           FastlaneCore::ConfigItem.new(key: :next_release_tag),
           FastlaneCore::ConfigItem.new(key: :version),
+          FastlaneCore::ConfigItem.new(key: :repo_path)
         ]
       end
 
