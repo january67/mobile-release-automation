@@ -1,9 +1,6 @@
 module Fastlane
   module Actions
-    module SharedValues
-      VERSION = :VERSION
-    end
-
+  
     class GetReleaseVersionAction < Action
       def self.run(params)
         other_action.github_api(
@@ -12,7 +9,7 @@ module Fastlane
           path: "/repos/january67/mobile_test/pulls/#{params[:pr_number]}"
         )
         
-        Actions.lane_context[SharedValues::VERSION] = lane_context[SharedValues::GITHUB_API_JSON]["head"]["ref"].split("/").last
+        version = lane_context[SharedValues::GITHUB_API_JSON]["head"]["ref"].split("/").last
       end
 
       #####################################################

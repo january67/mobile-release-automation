@@ -22,7 +22,8 @@ end
 
 lane :merge_publish_release do |options|
   repo_path = '/repos/january67/mobile_test'
-  get_release_version(
+
+  version = get_release_version(
     pr_number: options[:pr_number]
   )
   merge_pr(
@@ -31,19 +32,19 @@ lane :merge_publish_release do |options|
   )
 
   get_latest_release(
-    version: lane_context[SharedValues::VERSION],
+    version: version,
     repo_path: repo_path
   )
 
   get_release_tag(
     latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
-    version: lane_context[SharedValues::VERSION],
+    version: version,
     found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
   )
 
   publish_release(
     next_release_tag: lane_context[SharedValues::NEXT_RELEASE_TAG],
-    version: lane_context[SharedValues::VERSION],
+    version: version,
     repo_path: repo_path
   )
 
