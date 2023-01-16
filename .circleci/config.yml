@@ -26,7 +26,7 @@ jobs:
     macos:
       xcode: &xcode-img 13.4.1
     parameters:
-      version_name:
+      version:
         type: string
     steps:
       - checkout
@@ -39,7 +39,7 @@ jobs:
           name: Open PR from stabilization branch into releases
           command: |
             bundle exec fastlane open_pr_release  \
-            version_name:"<< parameters.version_name >>"
+            version:"<< parameters.version >>"
 
   merge_and_publish_release:
     macos:
@@ -67,7 +67,7 @@ workflows:
     when: << pipeline.parameters.trigger_pr_release >>
     jobs:
       - open_pull_request_release:
-          rc_version: << pipeline.parameters.version_name >>
+          version: << pipeline.parameters.version_name >>
 
   merge_release_trigger:
     when: << pipeline.parameters.trigger_merge_release >>
