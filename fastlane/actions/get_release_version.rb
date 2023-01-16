@@ -4,7 +4,7 @@ module Fastlane
     class GetReleaseVersionAction < Action
       def self.run(params)
         other_action.github_api(
-          api_token: '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',
+          api_token: params[:api_token],
           http_method: 'GET',
           path: "/repos/january67/mobile_test/pulls/#{params[:pr_number]}"
         )
