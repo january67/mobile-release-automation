@@ -7,7 +7,7 @@ module Fastlane
           api_token: params[:api_token],
           repo: 'january67/mobile_test',
           title: 'Release Review',
-          head: "release/#{params[:rc_version]}",
+          head: "release/#{params[:version]}",
           base: 'releases',
           assignees: 'loyalBot',
           team_reviewers: ['change-review-board']
@@ -23,7 +23,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :api_token,
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
-          FastlaneCore::ConfigItem.new(key: :rc_version)
+          FastlaneCore::ConfigItem.new(key: :version)
         ]
       end
 

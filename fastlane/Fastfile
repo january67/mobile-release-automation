@@ -15,7 +15,7 @@
 lane :open_pr_release do |options|
  
   open_releases_pull_request(
-    rc_version: options[:rc_version]
+    version: options[:version]
   )
   
 end
