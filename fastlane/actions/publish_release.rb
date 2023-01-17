@@ -33,7 +33,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :api_token,
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
-          FastlaneCore::ConfigItem.new(key: :latest_release_tag),
+          FastlaneCore::ConfigItem.new(key: :latest_release_tag, optional: true),
           FastlaneCore::ConfigItem.new(key: :version),
           FastlaneCore::ConfigItem.new(key: :repo_path)
         ]
