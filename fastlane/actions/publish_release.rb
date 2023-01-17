@@ -2,10 +2,15 @@ module Fastlane
   module Actions
     class PublishReleaseAction < Action
       def self.run(params)
-        
+
+        release_tag_title = other_action.get_release_tag_title(
+          latest_release_tag: params[:latest_release_tag],
+          version: params[:version]
+        )
+
         body = JSON.generate({
-          'tag_name' => "#{lane_context[SharedValues::NEXT_RELEASE_TAG]}",
-          'name' => "#{params[:version]} (RC#{lane_context[SharedValues::NEXT_RELEASE_TAG].split(".").last})",
+          'tag_name' => "#{release_tag_title[:tag]}",
+          'name' => "#{release_tag_title[:title]}",
           'target_commitish' => 'releases',
           'generate_release_notes' => true
           })
@@ -24,14 +29,11 @@ module Fastlane
 
 
       def self.available_options
-        # Define all options your action supports.
-
-        # Below a few examples
         [
           FastlaneCore::ConfigItem.new(key: :api_token,
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
-          FastlaneCore::ConfigItem.new(key: :next_release_tag),
+          FastlaneCore::ConfigItem.new(key: :latest_release_tag),
           FastlaneCore::ConfigItem.new(key: :version),
           FastlaneCore::ConfigItem.new(key: :repo_path)
         ]

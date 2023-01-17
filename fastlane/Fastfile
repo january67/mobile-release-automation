@@ -31,40 +31,17 @@ lane :merge_publish_release do |options|
     repo_path: repo_path
   )
 
-  get_latest_release(
+  latest_release_tag = get_latest_release(
     version: version,
     repo_path: repo_path
-  )
-
-  get_release_tag(
-    latest_release_tag: lane_context[SharedValues::LATEST_RC_VERSION],
-    version: version,
-    found_matching_version: lane_context[SharedValues::FOUND_MATCHING_VERSION_BOOL]
   )
 
   publish_release(
-    next_release_tag: lane_context[SharedValues::NEXT_RELEASE_TAG],
+    latest_release_tag: latest_release_tag,
     version: version,
     repo_path: repo_path
   )
 
-  # UI.message "Automobot attempting to merge pr number - #{options[:pr_number]}, head #{options[:rc_pr_head]}"
-
-  
-  # body = JSON.generate({'merge_method' => 'merge'})
-
-  # github_api(
-  #   api_token: ENV["BOT_PAT"],
-  #   http_method: 'PUT',
-  #   path: "/repos/january67/mobile_test/pulls/#{options[:pr_number]}/merge",
-  #   body: body
-  # )
-
-  # if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
-  #   UI.user_error!('Failed to merge pull request')
-  # end
-
-  # create_release(title: options[:rc_pr_title])
 end
 
 
