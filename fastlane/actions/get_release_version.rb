@@ -24,7 +24,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :api_token,
             env_name: 'BOT_PAT',
             description: 'Github PAT'),
-          FastlaneCore::ConfigItem.new(key: :pr_number, is_string: false)
+          FastlaneCore::ConfigItem.new(key: :pr_number)
 
         ]
       end
