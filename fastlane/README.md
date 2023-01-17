@@ -1,4 +1,5 @@
-## fastlane documentation
+fastlane documentation
+----
 
 # Installation
 
@@ -12,17 +13,21 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### open_pr_rc
+### open_pr_release
 
 ```sh
-[bundle exec] fastlane open_pr_rc
+[bundle exec] fastlane open_pr_release
 ```
 
-### merge_public_rc
+
+
+### merge_publish_release
 
 ```sh
-[bundle exec] fastlane merge_public_rc
+[bundle exec] fastlane merge_publish_release
 ```
+
+
 
 ### create_release
 
@@ -30,11 +35,15 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane create_release
 ```
 
+
+
 ### yo
 
 ```sh
 [bundle exec] fastlane yo
 ```
+
+
 
 ### hi
 
@@ -42,7 +51,9 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane hi
 ```
 
----
+
+
+----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 
