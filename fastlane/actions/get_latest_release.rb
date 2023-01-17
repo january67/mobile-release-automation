@@ -16,7 +16,7 @@ module Fastlane
 
         UI.user_error!('Failed to fetch releases') if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
 
-        puts lane_context[SharedValues::GITHUB_API_JSON]["tag_name"]
+        # puts lane_context[SharedValues::GITHUB_API_JSON]["tag_name"]
         release_list = lane_context[SharedValues::GITHUB_API_JSON]
         puts release_list.map { |entry| entry['tag_name'] }
 
