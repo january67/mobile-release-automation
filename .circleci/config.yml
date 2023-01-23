@@ -62,7 +62,7 @@ jobs:
           command: |
             bundle exec fastlane merge_publish_release  \
             pr_number:"<< parameters.pr_number >>"
-   group_trig:
+  group_trig:
     macos:
       xcode: &xcode-img 13.4.1
     steps:
@@ -94,5 +94,4 @@ workflows:
   trigger_groups:
     when: << pipeline.parameters.trigger_groups >>
     jobs:
-      - group_trig:
-          
+      - group_trig
