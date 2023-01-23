@@ -8,7 +8,8 @@ module Fastlane
           http_method: 'GET',
           path: "/repos/january67/mobile_test/pulls/#{params[:pr_number]}"
         )
-        
+        UI.user_error!('Failed to get pull request') if lane_context[SharedValues::GITHUB_API_STATUS_CODE] != 200
+
         version = lane_context[SharedValues::GITHUB_API_JSON]["head"]["ref"].split("/").last
       end
 

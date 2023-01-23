@@ -26,21 +26,27 @@ lane :merge_publish_release do |options|
   version = get_release_version(
     pr_number: options[:pr_number]
   )
-  merge_pr(
-    pr_number: options[:pr_number],
-    repo_path: repo_path
-  )
+  puts version
+  # merge_pr(
+  #   pr_number: options[:pr_number],
+  #   repo_path: repo_path
+  # )
 
-  latest_release_tag = get_latest_release(
-    version: version,
-    repo_path: repo_path
-  )
+  # latest_release_tag = get_latest_release(
+  #   version: version,
+  #   repo_path: repo_path
+  # )
 
-  publish_release(
-    latest_release_tag: latest_release_tag,
-    version: version,
-    repo_path: repo_path
-  )
+  # publish_release(
+  #   latest_release_tag: latest_release_tag,
+  #   version: version,
+  #   repo_path: repo_path
+  # )
+
+end
+
+lane :trigger_groups do
+  puts ENV["TESTFLIGHT_GROUPS"]
 
 end
 

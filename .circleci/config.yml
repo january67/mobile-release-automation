@@ -18,6 +18,9 @@ parameters:
   pr_number:
     type: integer
     default: 0
+  trigger_groups:
+    default: false
+    type: boolean
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -59,6 +62,20 @@ jobs:
           command: |
             bundle exec fastlane merge_publish_release  \
             pr_number:"<< parameters.pr_number >>"
+   group_trig:
+    macos:
+      xcode: &xcode-img 13.4.1
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            gem install bundler
+            bundle install
+      - run:
+          name: trigger group strings
+          command: |
+            bundle exec fastlane triger_groups
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -74,3 +91,8 @@ workflows:
     jobs:
       - merge_and_publish_release:
           pr_number: << pipeline.parameters.pr_number >>
+  trigger_groups:
+    when: << pipeline.parameters.trigger_groups >>
+    jobs:
+      - group_trig:
+          
