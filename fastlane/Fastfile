@@ -47,7 +47,8 @@ end
 
 lane :trigger_groups do
   puts ENV["TESTFLIGHT_GROUPS"]
-
+  dude = ENV["TESTFLIGHT_GROUPS"]
+  puts dude
 end
 
 
