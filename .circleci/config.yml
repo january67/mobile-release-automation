@@ -75,7 +75,7 @@ jobs:
       - run:
           name: trigger group strings
           command: |
-            bundle exec fastlane triger_groups
+            bundle exec fastlane trigger_groups
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
