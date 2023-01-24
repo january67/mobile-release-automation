@@ -48,6 +48,10 @@ end
 lane :trigger_groups do
   puts ENV["TESTFLIGHT_GROUPS"]
   dude = ENV["TESTFLIGHT_GROUPS"]
+  yo = ENV["TESTFLIGHT_GROUPS"].split(",")
+  puts '-------'
+  puts yo
+  puts '-------'
   puts dude
 end
 
